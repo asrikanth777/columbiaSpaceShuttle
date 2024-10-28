@@ -15,6 +15,7 @@ gravity = spcons.gravitational_constant # N*m^2 / kg^2
 earthMass = apcons.E
 
 
+
 # Vis-Viva Equation
 # the Equation is v = sqrt(mew(2/r - 1/a))
 # def VisViva():
