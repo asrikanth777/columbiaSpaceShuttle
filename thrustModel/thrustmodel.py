@@ -16,7 +16,8 @@ ssme = shuttle.Engine(
     fuel_flowrate = 514.49, # kg/s
     burn_time = 510, # seconds (8.5 minutes) 
     isp_vacuum= 452.3, # seconds (4.436km/s)
-    isp_sealevel= 366 # seconds (3.59km/s)  
+    isp_sealevel= 366, # seconds (3.59km/s)
+    fueltank_max=725000
 )
 
 srb = shuttle.Engine (
@@ -26,8 +27,11 @@ srb = shuttle.Engine (
     fuel_flowrate = 1831, # kg/s (both boosters burn fuel at this rate)
     burn_time = 123, # seconds (8.5 minutes) 
     isp_vacuum= 268, # seconds (4.436km/s)
-    isp_sealevel= 242 # seconds (3.59km/s)  
+    isp_sealevel= 242, # seconds (3.59km/s)  
+    fueltank_max = 454000 # kg
 )
 
 # another thing to consider is that the SRBs detach after 2 minutes, so we will make a separate variable for SRB mass,
 # whereas SSME mass will be included in the shuttles mass
+
+srBMass = 180000 # kg for both boosters combined

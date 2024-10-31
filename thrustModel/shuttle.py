@@ -11,7 +11,7 @@ class Shuttlecraft:
         self.engine = engine
 
 class Engine:
-    def __init__(self, name, thrust_vacuum, thrust_sealevel, fuel_flowrate, burn_time, isp_vacuum, isp_sealevel):
+    def __init__(self, name, thrust_vacuum, thrust_sealevel, fuel_flowrate, burn_time, isp_vacuum, isp_sealevel, fueltank_max):
         self.name = name
         self.thrust_vacuum = thrust_vacuum
         self.thrust_sealevel = thrust_sealevel
@@ -20,6 +20,7 @@ class Engine:
         self.isp_vacuum = isp_vacuum
         self.isp_sealevel = isp_sealevel
         self.fuel_consumed = 0
+        self.fueltank_max = fueltank_max 
     
     def thrustCalculation(self, time):
         if time <= self.burn_time:
