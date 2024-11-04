@@ -9,29 +9,12 @@ There are three main engines used
 For now, we will ignore the orbital maneuvering system, focusing on the SSMEs and SRBs during launch and entering orbit
 """
 
-ssme = shuttle.Engine(
-    name = "RS-25",
-    thrust_vacuum = 2279000, # kN
-    thrust_sealevel = 1860000, # kN
-    fuel_flowrate = 514.49, # kg/s
-    burn_time = 510, # seconds (8.5 minutes) 
-    isp_vacuum= 452.3, # seconds (4.436km/s)
-    isp_sealevel= 366, # seconds (3.59km/s)
-    fueltank_max=725000
-)
+"""
+Timeline for Shuttle
+1) -6.6 to 0s, the SSMEs ignite for pre-lift checks
+2) 0 to 120s (2min), both the SSME and SRB launch together from pad
+3) at 120s, the SRBs detach and fall into ocean
+4) 120s to 510s, the shuttle is has reached far enough to enter orbit, external tank drops
+"""
 
-srb = shuttle.Engine (
-    name = "SRB BI-1",
-    thrust_vacuum = 27000000, # kN
-    thrust_sealevel = 24000000, # kN
-    fuel_flowrate = 1831, # kg/s (both boosters burn fuel at this rate)
-    burn_time = 123, # seconds (8.5 minutes) 
-    isp_vacuum= 268, # seconds (4.436km/s)
-    isp_sealevel= 242, # seconds (3.59km/s)  
-    fueltank_max = 454000 # kg
-)
 
-# another thing to consider is that the SRBs detach after 2 minutes, so we will make a separate variable for SRB mass,
-# whereas SSME mass will be included in the shuttles mass
-
-srBMass = 180000 # kg for both boosters combined
