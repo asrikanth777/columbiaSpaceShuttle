@@ -28,18 +28,34 @@ class Atmosphere:
         self.lapseRate = lapseRate
 
 tropoSphere = Atmosphere(
-    
+    name =          "Troposphere",
+    basePressure =  101.3,
+    baseAltitude =  0,
+    scaleHeight =   8.5,
+    lapseRate =     -0.0065
 )
 
 stratoSphere = Atmosphere(
-
+    name =          "Stratosphere",
+    basePressure =  26.5,
+    baseAltitude =  11,
+    scaleHeight =   7.0,
+    lapseRate =     0
 )
 
 mesoSphere = Atmosphere(
-
+    name =          "Mesosphere",
+    basePressure =  0.3,
+    baseAltitude =  25,
+    scaleHeight =   6.5,
+    lapseRate =     -0.0028
 )
 
 thermoSphere = Atmosphere(
-    
+    name =          "Thermosphere",
+    basePressure =  0,
+    baseAltitude =  85,
+    scaleHeight =   5.0,
+    lapseRate =     0
 )    
 
