@@ -26,36 +26,51 @@ class Atmosphere:
         self.baseAltitude = baseAltitude
         self.scaleHeight = scaleHeight
         self.lapseRate = lapseRate
+    
+    def altitudePressure(self, altitude):
+        raise NotImplementedError("Each atmosphere should have its own calculation")
 
-tropoSphere = Atmosphere(
-    name =          "Troposphere",
-    basePressure =  101.3,
-    baseAltitude =  0,
-    scaleHeight =   8.5,
-    lapseRate =     -0.0065
-)
 
-stratoSphere = Atmosphere(
-    name =          "Stratosphere",
-    basePressure =  26.5,
-    baseAltitude =  11,
-    scaleHeight =   7.0,
-    lapseRate =     0
-)
+class tropoSphere(Atmosphere):
+    def __init__(self):
+        super().__init__(
+            name =          "Troposphere",
+            basePressure =  101.3,
+            baseAltitude =  0,
+            scaleHeight =   8.5,
+            lapseRate =     -0.0065
+        )
 
-mesoSphere = Atmosphere(
-    name =          "Mesosphere",
-    basePressure =  0.3,
-    baseAltitude =  25,
-    scaleHeight =   6.5,
-    lapseRate =     -0.0028
-)
+class stratoSphere(Atmosphere):
+    def __init__(self):
+        super().__init__(
+            name =          "Stratosphere",
+            basePressure =  26.5,
+            baseAltitude =  11,
+            scaleHeight =   7.0,
+            lapseRate =     0
+        )
 
-thermoSphere = Atmosphere(
-    name =          "Thermosphere",
-    basePressure =  0,
-    baseAltitude =  85,
-    scaleHeight =   5.0,
-    lapseRate =     0
-)    
+class mesoSphere(Atmosphere):
+    def __init__(self):
+        super().__init__(
+            name =          "Mesosphere",
+            basePressure =  0.3,
+            baseAltitude =  25,
+            scaleHeight =   6.5,
+            lapseRate =     -0.0028
+        )
+
+
+class thermoSphere(Atmosphere):
+    def __init__(self):
+        super().__init__(
+            name =          "Thermosphere",
+            basePressure =  0,
+            baseAltitude =  85,
+            scaleHeight =   5.0,
+            lapseRate =     0 #its not zero, but it is difficult to calculate lapserate, but its actually some what positive
+        )
+    
+    
 
