@@ -15,6 +15,9 @@ Here are the different atmospheres it travels through, from first to last
 4) Thermosphere
 """
 
+altitude = 0
+atmosZone = ""
+
 # I am starting by defining a class Atmosphere to declare important variables for calculation
 class Atmosphere:
     def __init__(self, name, basePressure, baseAltitude, scaleHeight, lapseRate): # these are characteristics
@@ -29,6 +32,8 @@ class Atmosphere:
     
     def altitudePressure(self, altitude):
         raise NotImplementedError("Each atmosphere should have its own calculation")
+    
+    
 
 
 class tropoSphere(Atmosphere):
@@ -40,6 +45,13 @@ class tropoSphere(Atmosphere):
             scaleHeight =   8.5,
             lapseRate =     -0.0065
         )
+    
+    def altitudePressure(self, altitude):
+        if altitude <= 11:
+            instantPressure = self.basePressure * (1 + self.lapseRate * (altitude - self.baseAltitude)) ** (9.8 / (self.lapseRate * 287))
+        else:
+            return ("should not be in troposphere")
+    
 
 class stratoSphere(Atmosphere):
     def __init__(self):
@@ -72,5 +84,19 @@ class thermoSphere(Atmosphere):
             lapseRate =     0 #its not zero, but it is difficult to calculate lapserate, but its actually some what positive
         )
     
+def getPressure(altitude):
+    if altitude < 11:
+        atmosZone = tropoSphere()
+    elif 11 <= altitude < 25:
+        atmosZone = stratoSphere()
+    elif 25 <= altitude < 85:
+        atmosZone = mesoSphere()
+    else:
+        atmosZone = thermoSphere()
     
+     instantPressure = atmosZone.altitudePressure(altitude)
+     return instantPressure
 
+
+
+ 
