@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib as mpl
 from scipy import constants as spcons
 from astropy import constants as apcons
+import equations as adiEq
 
 """
 An important thing to note is that the rocket travels through different atmospheres as it reaches orbit.
@@ -17,14 +18,19 @@ Here are the different atmospheres it travels through, from first to last
 
 altitude = 0
 atmosZone = ""
+seaLevelTemp = 288.15 #Kelvin
+gasConstant = apcons.R # gas constant (J/ mol*k)
+airMolarMass = 0.0289647 # kg/mol
+
 
 # I am starting by defining a class Atmosphere to declare important variables for calculation
 class Atmosphere:
-    def __init__(self, name, basePressure, baseAltitude, scaleHeight, lapseRate): # these are characteristics
+    def __init__(self, name, baseTemperature, basePressure, baseAltitude, scaleHeight, lapseRate): # these are characteristics
         # pressure and altitude are self explanatory, but scale height and lapse rates were new to me so here is what i learned
         # scale height is when atmosphere pressure to 37% of starting value (e^-1)
         # lapse rate is how temp decreases by each km, since it gets colder as you go up (Brrrrrrr)
         self.name = name
+        self.baseTemperature = baseTemperature
         self.basePressure = basePressure
         self.baseAltitude = baseAltitude
         self.scaleHeight = scaleHeight
@@ -39,16 +45,18 @@ class Atmosphere:
 class tropoSphere(Atmosphere):
     def __init__(self):
         super().__init__(
-            name =          "Troposphere",
-            basePressure =  101.3,
-            baseAltitude =  0,
-            scaleHeight =   8.5,
-            lapseRate =     -0.0065
+            name =              "Troposphere",
+            baseTemperature =   288.15,
+            basePressure =      101.3,
+            baseAltitude =      0,
+            scaleHeight =       8.5,
+            lapseRate =         -0.0065
         )
-    
+    # P = P(0) * (1 + lapserate/sealeveltemp * altitude_diff) ** ((-g * air molarmass) / (R * lapserate))
     def altitudePressure(self, altitude):
         if altitude <= 11:
-            instantPressure = self.basePressure * (1 + self.lapseRate * (altitude - self.baseAltitude)) ** (9.8 / (self.lapseRate * 287))
+            instantPressure = self.basePressure * \
+            (1 + (self.lapseRate/self.baseTemperature) * (altitude - self.baseAltitude)) ** ((-adiEq.gravity*airMolarMass) / (self.lapseRate * gasConstant))
         else:
             return ("should not be in troposphere")
     
@@ -56,33 +64,58 @@ class tropoSphere(Atmosphere):
 class stratoSphere(Atmosphere):
     def __init__(self):
         super().__init__(
-            name =          "Stratosphere",
-            basePressure =  26.5,
-            baseAltitude =  11,
-            scaleHeight =   7.0,
-            lapseRate =     0
+            name =              "Stratosphere",
+            baseTemperature =   216.65,
+            basePressure =      26.5,
+            baseAltitude =      11,
+            scaleHeight =       7.0,
+            lapseRate =         0
         )
+    
+    # P = P(0) * e**((-g*airmolarmass*altitude_diff)/(R*baseTemp)) 
+    def altitudePressure(self, altitude):
+    
+        if 11 <= altitude < 25:
+            instantPressure = self.basePressure * np.exp((-adiEq.gravity*airMolarMass*(altitude - self.baseAltitude)/(gasConstant*self.baseTemperature)))
+        else:
+            return ("should not be in stratosphere")
 
 class mesoSphere(Atmosphere):
     def __init__(self):
         super().__init__(
-            name =          "Mesosphere",
-            basePressure =  0.3,
-            baseAltitude =  25,
-            scaleHeight =   6.5,
-            lapseRate =     -0.0028
+            name =              "Mesosphere",
+            baseTemperature =   270, 
+            basePressure =      0.3,
+            baseAltitude =      25,
+            scaleHeight =       6.5,
+            lapseRate =         -0.0028
+
         )
+    
+    def altitudePressure(self, altitude):
+        if 25 <= altitude < 85:
+            print("work on this")
+        else:
+            return ("should not be in stratosphere")
 
 
 class thermoSphere(Atmosphere):
     def __init__(self):
         super().__init__(
-            name =          "Thermosphere",
-            basePressure =  0,
-            baseAltitude =  85,
-            scaleHeight =   5.0,
-            lapseRate =     0 #its not zero, but it is difficult to calculate lapserate, but its actually some what positive
+            name =              "Thermosphere",
+            baseTemperature =   2340978510894571205 # doesnt matter, it isn't used and temp there is fluctuating
+            basePressure =      0,
+            baseAltitude =      85,
+            scaleHeight =       5.0,
+            lapseRate =         0 # its not zero, but it is difficult to calculate lapserate, but its actually some what positive
         )
+    """
+    def altitudePressure(self, altitude):
+        if 11 <= altitude < 25:
+            print("work on this")
+        else:
+            return ("should not be in stratosphere")
+        """
     
 def getPressure(altitude):
     if altitude < 11:
