@@ -74,7 +74,6 @@ class stratoSphere(Atmosphere):
     
     # P = P(0) * e**((-g*airmolarmass*altitude_diff)/(R*baseTemp)) 
     def altitudePressure(self, altitude):
-    
         if 11 <= altitude < 25:
             instantPressure = self.basePressure * np.exp((-adiEq.gravity*airMolarMass*(altitude - self.baseAltitude)/(gasConstant*self.baseTemperature)))
         else:
@@ -92,30 +91,33 @@ class mesoSphere(Atmosphere):
 
         )
     
+    # P = P(0) * (1 + lapserate/sealeveltemp * altitude_diff) ** ((-g * air molarmass) / (R * lapserate))
     def altitudePressure(self, altitude):
         if 25 <= altitude < 85:
-            print("work on this")
+            instantPressure = self.basePressure * \
+            (1 + (self.lapseRate/self.baseTemperature) * (altitude - self.baseAltitude)) ** ((-adiEq.gravity*airMolarMass) / (self.lapseRate * gasConstant))
         else:
-            return ("should not be in stratosphere")
+            return ("should not be in mesosphere")
 
 
 class thermoSphere(Atmosphere):
     def __init__(self):
         super().__init__(
             name =              "Thermosphere",
-            baseTemperature =   2340978510894571205 # doesnt matter, it isn't used and temp there is fluctuating
+            baseTemperature =   2340978510894571205, # doesnt matter, it isn't used and temp there is fluctuating
             basePressure =      0,
             baseAltitude =      85,
             scaleHeight =       5.0,
             lapseRate =         0 # its not zero, but it is difficult to calculate lapserate, but its actually some what positive
         )
-    """
+    
+    # P = P(0) * e**(-(altitude_diff)/scale_height)
     def altitudePressure(self, altitude):
-        if 11 <= altitude < 25:
-            print("work on this")
+        if altitude >= 85:
+            instantPressure = self.basePressure * np.exp((altitude - self.baseAltitude)/self.scaleHeight)
         else:
-            return ("should not be in stratosphere")
-        """
+            return ("should not be in thermosphere")
+    
     
 def getPressure(altitude):
     if altitude < 11:
@@ -127,8 +129,8 @@ def getPressure(altitude):
     else:
         atmosZone = thermoSphere()
     
-     instantPressure = atmosZone.altitudePressure(altitude)
-     return instantPressure
+    instantPressure = atmosZone.altitudePressure(altitude)
+    return instantPressure
 
 
 
