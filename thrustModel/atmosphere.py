@@ -17,9 +17,9 @@ Here are the different atmospheres it travels through, from first to last
 """
 
 altitude = 0
-atmosZone = ""
+currentAtmosSphere = None
 seaLevelTemp = 288.15 #Kelvin
-gasConstant = apcons.R # gas constant (J/ mol*k)
+gasConstant = apcons.R.value # gas constant (J/ mol*k)
 airMolarMass = 0.0289647 # kg/mol
 
 
@@ -55,11 +55,13 @@ class tropoSphere(Atmosphere):
     # P = P(0) * (1 + lapserate/sealeveltemp * altitude_diff) ** ((-g * air molarmass) / (R * lapserate))
     def altitudePressure(self, altitude):
         if altitude <= 11:
-            instantPressure = self.basePressure * \
-            (1 + (self.lapseRate/self.baseTemperature) * (altitude - self.baseAltitude)) ** ((-adiEq.gravity*airMolarMass) / (self.lapseRate * gasConstant))
-        else:
-            return ("should not be in troposphere")
-    
+            instantPressure = self.basePressure * (1 + (self.lapseRate/self.baseTemperature) * (altitude - self.baseAltitude)) ** ((-adiEq.gravity_in_km*airMolarMass) / (self.lapseRate * gasConstant))
+
+
+            return instantPressure
+        
+
+   
 
 class stratoSphere(Atmosphere):
     def __init__(self):
@@ -69,16 +71,15 @@ class stratoSphere(Atmosphere):
             basePressure =      26.5,
             baseAltitude =      11,
             scaleHeight =       7.0,
-            lapseRate =         0
+            lapseRate =         0 * 1000
         )
     
     # P = P(0) * e**((-g*airmolarmass*altitude_diff)/(R*baseTemp)) 
     def altitudePressure(self, altitude):
         if 11 <= altitude < 25:
             instantPressure = self.basePressure * np.exp((-adiEq.gravity*airMolarMass*(altitude - self.baseAltitude)/(gasConstant*self.baseTemperature)))
-        else:
-            return ("should not be in stratosphere")
-
+            return instantPressure
+        
 class mesoSphere(Atmosphere):
     def __init__(self):
         super().__init__(
@@ -87,7 +88,7 @@ class mesoSphere(Atmosphere):
             basePressure =      0.3,
             baseAltitude =      25,
             scaleHeight =       6.5,
-            lapseRate =         -0.0028
+            lapseRate =         -0.0028 * 1000
 
         )
     
@@ -96,8 +97,8 @@ class mesoSphere(Atmosphere):
         if 25 <= altitude < 85:
             instantPressure = self.basePressure * \
             (1 + (self.lapseRate/self.baseTemperature) * (altitude - self.baseAltitude)) ** ((-adiEq.gravity*airMolarMass) / (self.lapseRate * gasConstant))
-        else:
-            return ("should not be in mesosphere")
+            return instantPressure
+       
 
 
 class thermoSphere(Atmosphere):
@@ -114,24 +115,51 @@ class thermoSphere(Atmosphere):
     # P = P(0) * e**(-(altitude_diff)/scale_height)
     def altitudePressure(self, altitude):
         if altitude >= 85:
-            instantPressure = self.basePressure * np.exp((altitude - self.baseAltitude)/self.scaleHeight)
-        else:
-            return ("should not be in thermosphere")
+            instantPressure = self.basePressure * np.exp(-(altitude - self.baseAltitude)/self.scaleHeight)
+            return instantPressure
+        
     
+
+
+def updateAtmosphere(altitude):
+    if altitude < 11:
+        return tropoSphere()
+    elif 11 <= altitude < 25:
+        return stratoSphere()
+    elif 25 <= altitude < 85:
+        return mesoSphere()
+    else:
+        return thermoSphere()
+
+    return currentAtmosSphere
     
 def getPressure(altitude):
-    if altitude < 11:
-        atmosZone = tropoSphere()
-    elif 11 <= altitude < 25:
-        atmosZone = stratoSphere()
-    elif 25 <= altitude < 85:
-        atmosZone = mesoSphere()
+    currentAtmosSphere = updateAtmosphere(altitude)
+    print(currentAtmosSphere)
+
+    if currentAtmosSphere:
+        return currentAtmosSphere.altitudePressure(altitude)
     else:
-        atmosZone = thermoSphere()
-    
-    instantPressure = atmosZone.altitudePressure(altitude)
-    return instantPressure
+        return ("invalid altitude")
 
+# for testing purposes
+tropoExpo = ((-adiEq.gravity*airMolarMass) / (-0.0065 * gasConstant))
+tropoBase = (1 + (-0.0065/288.15) * (10))
+final = 101.3 * tropoBase ** tropoExpo
+print(final)
 
+test1 = 10
+test2 = 20
+test3 = 60
+test4 = 90
+
+tropo = tropoSphere()
+
+print(tropo.lapseRate)
+
+print(getPressure(test1))
+print(getPressure(test2))
+print(getPressure(test3))
+print(getPressure(test4))
 
  
