@@ -12,7 +12,6 @@ from astropy import constants as apcons
 
 # Important Constants
 gravity = apcons.g0.value
-gravity_in_km = gravity / 1000
 gravityConst = spcons.gravitational_constant # N*m^2 / kg^2
 earthMass = apcons.M_earth.value
 

@@ -54,13 +54,10 @@ class tropoSphere(Atmosphere):
         )
     # P = P(0) * (1 + lapserate/sealeveltemp * altitude_diff) ** ((-g * air molarmass) / (R * lapserate))
     def altitudePressure(self, altitude):
-        if altitude <= 11:
-            instantPressure = self.basePressure * (1 + (self.lapseRate/self.baseTemperature) * (altitude - self.baseAltitude)) ** ((-adiEq.gravity_in_km*airMolarMass) / (self.lapseRate * gasConstant))
-
-
+        if altitude <= 11000:
+            instantPressure = self.basePressure * \
+            (1 + (self.lapseRate/self.baseTemperature) * (altitude - self.baseAltitude)) ** ((-adiEq.gravity*airMolarMass) / (self.lapseRate * gasConstant))
             return instantPressure
-        
-
    
 
 class stratoSphere(Atmosphere):
@@ -69,15 +66,15 @@ class stratoSphere(Atmosphere):
             name =              "Stratosphere",
             baseTemperature =   216.65,
             basePressure =      26.5,
-            baseAltitude =      11,
+            baseAltitude =      11000,
             scaleHeight =       7.0,
-            lapseRate =         0 * 1000
+            lapseRate =         0
         )
     
     # P = P(0) * e**((-g*airmolarmass*altitude_diff)/(R*baseTemp)) 
     def altitudePressure(self, altitude):
-        if 11 <= altitude < 25:
-            instantPressure = self.basePressure * np.exp((-adiEq.gravity*airMolarMass*(altitude - self.baseAltitude)/(gasConstant*self.baseTemperature)))
+        if 11000 <= altitude < 25000:
+            instantPressure = self.basePressure * np.exp((-adiEq.gravity*airMolarMass*(altitude - self.baseAltitude))/(gasConstant*self.baseTemperature))
             return instantPressure
         
 class mesoSphere(Atmosphere):
@@ -86,15 +83,15 @@ class mesoSphere(Atmosphere):
             name =              "Mesosphere",
             baseTemperature =   270, 
             basePressure =      0.3,
-            baseAltitude =      25,
+            baseAltitude =      25000,
             scaleHeight =       6.5,
-            lapseRate =         -0.0028 * 1000
+            lapseRate =         -0.0028
 
         )
     
     # P = P(0) * (1 + lapserate/sealeveltemp * altitude_diff) ** ((-g * air molarmass) / (R * lapserate))
     def altitudePressure(self, altitude):
-        if 25 <= altitude < 85:
+        if 25000 <= altitude < 85000:
             instantPressure = self.basePressure * \
             (1 + (self.lapseRate/self.baseTemperature) * (altitude - self.baseAltitude)) ** ((-adiEq.gravity*airMolarMass) / (self.lapseRate * gasConstant))
             return instantPressure
@@ -107,14 +104,14 @@ class thermoSphere(Atmosphere):
             name =              "Thermosphere",
             baseTemperature =   2340978510894571205, # doesnt matter, it isn't used and temp there is fluctuating
             basePressure =      0,
-            baseAltitude =      85,
+            baseAltitude =      85000,
             scaleHeight =       5.0,
             lapseRate =         0 # its not zero, but it is difficult to calculate lapserate, but its actually some what positive
         )
     
     # P = P(0) * e**(-(altitude_diff)/scale_height)
     def altitudePressure(self, altitude):
-        if altitude >= 85:
+        if altitude >= 85000:
             instantPressure = self.basePressure * np.exp(-(altitude - self.baseAltitude)/self.scaleHeight)
             return instantPressure
         
@@ -122,11 +119,11 @@ class thermoSphere(Atmosphere):
 
 
 def updateAtmosphere(altitude):
-    if altitude < 11:
+    if altitude < 11000:
         return tropoSphere()
-    elif 11 <= altitude < 25:
+    elif 11000 <= altitude < 25000:
         return stratoSphere()
-    elif 25 <= altitude < 85:
+    elif 25000 <= altitude < 85000:
         return mesoSphere()
     else:
         return thermoSphere()
@@ -135,7 +132,6 @@ def updateAtmosphere(altitude):
     
 def getPressure(altitude):
     currentAtmosSphere = updateAtmosphere(altitude)
-    print(currentAtmosSphere)
 
     if currentAtmosSphere:
         return currentAtmosSphere.altitudePressure(altitude)
@@ -143,23 +139,19 @@ def getPressure(altitude):
         return ("invalid altitude")
 
 # for testing purposes
-tropoExpo = ((-adiEq.gravity*airMolarMass) / (-0.0065 * gasConstant))
-tropoBase = (1 + (-0.0065/288.15) * (10))
-final = 101.3 * tropoBase ** tropoExpo
-print(final)
-
-test1 = 10
-test2 = 20
-test3 = 60
-test4 = 90
-
-tropo = tropoSphere()
-
-print(tropo.lapseRate)
+test1 = 10000
+test2 = 20000
+test3 = 60000
+test4 = 90000
 
 print(getPressure(test1))
 print(getPressure(test2))
 print(getPressure(test3))
 print(getPressure(test4))
 
- 
+""" Recap on calculated pressures
+Given that I am struggling to find the right equations to model pressure,
+these should be good enough/close enough to give accurate readings
+trying to refine it more and more will be pointless, so its time
+to move to modeling thrust
+"""
