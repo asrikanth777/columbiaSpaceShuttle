@@ -17,4 +17,42 @@ Timeline for Shuttle
 4) 120s to 510s, the shuttle is has reached far enough to enter orbit, external tank drops
 """
 
+"""
+Important Equations to use:
+1) Thrust Equation:    F = mdot* ve + ae(pe - pa)
+    F = Thrust Force
+    mdot = Mass flow rate of propellant
+    ve = exhaust velocity
+    ae = exit area of thruster
+    pe = pressure at nozzle exit
+    pa = atmospheric pressure
+
+2) Mass Flow Rate: mdot = rho*a*ve
+    rho = propellant density
+    a = throat area of nozzle (spot most narrow cross section)
+    ve = exhaust velocity
+
+3) Tsiolkovsky Rocket Equation: deltaV = ve ln (mi/mf)
+    ve = exhaust velocity
+    mi = initial mass of rocket + propellant
+    mf = mass after propellant is burned
+
+4) Drag Force: Fdrag = (1/2)*rho*(v^2)*Cd*A
+    rho = atmospheric density
+    v = velocity of rocket
+    Cd = drag coefficient
+    A = cross sectional area (part that is facing outward from the center of body and perpendicular to drag/thrust direction)
+    p.s. we gonna have to figure out how to adjust for the heads of the shuttle and thrusters, since they are rounded.
+
+5) Specific Impulse: Isp = Fthrust/(mdot*g)
+    Isp = Specific Impulse
+    Fthrust = thrust force
+    mdot = mass flowrate
+    g = grav accel (9.81)
+
+6) Exhaust Velocity Relation: ve = Isp * g
+ve = exhaust velocity
+Isp - specific impulse
+g = grav accel
+"""
 
