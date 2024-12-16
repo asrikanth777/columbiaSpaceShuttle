@@ -28,6 +28,7 @@ def tsiolkovsky(ve, mi, mf):
     return deltaV
 
 def dragForce(rho, v, cD, a):
+    # cD at launch is 0.55 with srb and tank, and cD after dispatch is 1.1
     Fdrag = (1/2)*rho*(v**2)*cD*a
     return Fdrag
 

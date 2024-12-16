@@ -2,6 +2,7 @@
 this file is for shuttle information in regards to calculating thrust
 """
 import equations
+import numpy as np
 
 
 class Shuttlecraft:
@@ -44,7 +45,14 @@ ssme = Engine(
     isp_vacuum= 452.3, # seconds (4.436km/s)
     isp_sealevel= 366, # seconds (3.59km/s)
     fueltank_max= 733000, # combined
-    empty_tank=26500
+    empty_tank= 26500,
+    externaltank_diameters = 8.4, #m
+    externaltank_height = 46.93, #m 
+    externaltank_surfacearea = 1238.45, #m^2
+    shuttle_diameter = 5.2, #m
+    shuttle_length = 37.24, #m
+    shuttle_surfacearea = 608.36
+
 )
 
 srb = Engine (
@@ -56,8 +64,18 @@ srb = Engine (
     isp_vacuum= 268, # seconds (4.436km/s)
     isp_sealevel= 242, # seconds (3.59km/s)  
     fueltank_max = 454000, # kg (combined)
-    empty_tank= 180000
+    empty_tank= 180000,
+    tank_diameters = 3.71, # m
+    tank_height = 45.46, #m
+    tank_surfacearea = 1061.08 #m^2 its 2 * (2*pi*(3.71/2)*45.46)
+"""     srb cross sectional area
+        45.46m long, 3.71m diam
+        area = 2pi*(d/2)*h
+"""
+
 )
+
+
 
 
 
