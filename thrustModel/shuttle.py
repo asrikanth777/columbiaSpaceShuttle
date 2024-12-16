@@ -68,14 +68,12 @@ srb = Engine (
     tank_diameters = 3.71, # m
     tank_height = 45.46, #m
     tank_surfacearea = 1061.08 #m^2 its 2 * (2*pi*(3.71/2)*45.46)
+)
+
 """     srb cross sectional area
         45.46m long, 3.71m diam
         area = 2pi*(d/2)*h
 """
-
-)
-
-
 
 
 

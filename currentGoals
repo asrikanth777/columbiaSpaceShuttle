@@ -1,0 +1,6 @@
+December 16, 2024
+- Haven't worked on this project in a while. Coming back, I realized alot of things were just unrealistic to simulate. They were either impossible, or highly likely I would mess it up.
+    + Thrust and ISP are no going to be "calculated". Going to use linear approximations between the given values and go from there
+    + Because of this, I want to create a 3-D model, simulating x,y,z planes. This will bring some complexity to the project that was lost when I changed plans for the calculations, and make it more fun to graph.
+    + As a result, I will probably not use the atmosphere.py file alot, and I have to work on adding more equations and constants.
+- The hardest part about this is not even the coding, but the math and the planning. It feels like every corner I am having to change my approach. We will see how it works out in the end.

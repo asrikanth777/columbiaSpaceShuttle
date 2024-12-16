@@ -22,36 +22,48 @@ rhoInit = rocEq.atmosDensity(0)
 phase1mass = columbia.ssme.fueltank_max + columbia.srb.fueltank_max 
 FgravPhase1  = phase1mass * eq.gravity
 
-a1 = 0
-v1 = 0
-x1 = 0
+a1 = np.array([ 0, 0, 0])
+v1 = np.array([ 0, 0, 0])
+x1 = np.array([ 0, 0, 0])
 m1 = 0
 Fdrag = 0
 rho = 0
 
 
-# for the sake of time, i am not going to simulate how it moves side to side
-# i am going to assume it goes straight up, not complicating calculations
+# going to simulate how it pitches as it ascends to that it goes into orbit
+# this is because i am approximating thrust with the sealevel and vacuum readings
+# might not even use the atmosphere calculations i planned before
 
-a1 += ((Fthrust - FgravPhase1) / phase1mass)
-v1 += (a1*timeStep)
-x1 += (v1*timeStep)
-m1 += (phase1mass - (columbia.ssme.fuel_flowrate - columbia.srb.fuel_flowrate)*timeStep)
+a1[1] += ((Fthrust - FgravPhase1) / phase1mass)
+v1[1] += (a1*timeStep)
+x1[1] += (v1*timeStep)
+totalFuelRate = columbia.ssme.fuel_flowrate + columbia.srb.fuel_flowrate
+m1 += (phase1mass - (totalFuelRate)*timeStep)
 timePassed += timeStep
 
 # max altitude of the shuttle was at 274km
-while (0 <= x1 <= 274000):
+while (0 <= x1[1] <= 274000):
 
     rho = rocEq.atmosDensity(x1)
 
     if timePassed <= 120:
         cDrag = 0.55
+        dragSurfaceAr = columbia.ssme.shuttle_surfacearea + columbia.ssme.externaltank_surfacearea + columbia.srb.tank_surfacearea
+
     else:
         cDrag = 1.1
+        dragSurfaceAr = columbia.ssme.shuttle_surfacearea + columbia.ssme.externaltank_surfacearea
 
+    Fdrag = rocEq.dragForce(rho, v1, cDrag, dragSurfaceAr)
+    Fgrav = phase1mass * rocEq.gravity(x1[1])
 
-    Fdrag = rocEq.dragForce(rho, v1, cDrag, )
+    a1[1] = (Fthrust - Fdrag - Fgrav) / phase1mass
+    v1[1] += a1[1] * timeStep
+    x1[1] += v1[1] * timeStep
 
+    m1 -= totalFuelRate*timeStep
+
+    
 
 
 
