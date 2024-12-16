@@ -15,6 +15,8 @@ gravity = apcons.g0.value
 gravityConst = spcons.gravitational_constant # N*m^2 / kg^2
 earthMass = apcons.M_earth.value
 earthRadius = apcons.R_earth.value
+seaLevelPA = apcons.atm.value
+seaLevelKPA = seaLevelPA / 1000
 
 
 

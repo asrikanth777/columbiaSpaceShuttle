@@ -1,13 +1,32 @@
 import numpy as np
 import equations as eq
 import shuttle as s
+import atmosphere as atm
 
 
-
-def ThrustEquation(altitude):
+def ThrustEquation(altitude, time):
     # i have sealevel and vacuum values, im going to just approximate based on altitude
-    thrust_SRB = s.srb.thrust_sealevel + (altitude/100000)*(s.srb.thrust_vacuum-s.srb.thrust_sealevel)
-    thrust_SSME = s.ssme.thrust_sealevel + (altitude/100000) * (s.ssme.thrust_vacuum-s.srb.thrust_sealevel)
+    pressure = atm.getPressure(altitude)
+    pRatio = pressure / eq.seaLevelKPA
+
+    thrust_SRB = s.srb.thrust_vacuum + (1 - pRatio)*(s.srb.thrust_vacuum-s.srb.thrust_sealevel)
+    thrust_SSME = s.ssme.thrust_vacuum + (1 - pRatio) * (s.ssme.thrust_vacuum-s.ssme.thrust_sealevel)
+
+    if time <= 120:
+        finThrust = thrust_SRB + thrust_SSME
+    else:
+        finThrust = thrust_SSME
+
+    return finThrust
+
+
+
+
+
+
+
+
+
 
 
 def tsiolkovsky(ve, mi, mf):
