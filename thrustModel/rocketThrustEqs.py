@@ -39,3 +39,12 @@ def exhaustVelRelat(iSP):
     ve = iSP * eq.gravity
     return ve
 
+def atmosDensity(altitude):
+    # sea level density = 1.225kg/m^3
+    rhoFin = 1.225*np.exp(altitude/8500)
+
+""" some extra info
+a = Fthrust - Fdrag - Fgravity / m
+vNew = vOld+ a*deltaT
+xNew = xOld + vNew*deltaT
+"""

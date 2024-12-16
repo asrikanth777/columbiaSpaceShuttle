@@ -43,7 +43,7 @@ ssme = Engine(
     burn_time = 510, # seconds (8.5 minutes) 
     isp_vacuum= 452.3, # seconds (4.436km/s)
     isp_sealevel= 366, # seconds (3.59km/s)
-    fueltank_max=733000,
+    fueltank_max= 733000, # combined
     empty_tank=26500
 )
 
@@ -55,7 +55,7 @@ srb = Engine (
     burn_time = 123, # seconds (8.5 minutes) 
     isp_vacuum= 268, # seconds (4.436km/s)
     isp_sealevel= 242, # seconds (3.59km/s)  
-    fueltank_max = 454000, # kg
+    fueltank_max = 454000, # kg (combined)
     empty_tank= 180000
 )
 
