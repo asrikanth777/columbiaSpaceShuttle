@@ -135,7 +135,7 @@ def getPressure(altitude):
 
     if currentAtmosSphere:
         pressure = currentAtmosSphere.altitudePressure(altitude)
-        if pressure <= 0:
+        if pressure < 0:
             return "Invalid Pressure at this altitude"
         return pressure
     else:
