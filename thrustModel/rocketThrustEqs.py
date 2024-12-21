@@ -19,16 +19,6 @@ def ThrustEquation(altitude, time):
 
     return finThrust
 
-
-
-
-
-
-
-
-
-
-
 def tsiolkovsky(ve, mi, mf):
     deltaV = ve * np.log(mi/mf)
     return deltaV
@@ -39,15 +29,16 @@ def dragForce(rho, v, cD, a):
     Fdrag = (1/2)*rho*(vNorm**2)*cD*a
     return Fdrag
 
-def specificImpulse(h, time):
+def specificImpulse(altitude):
     # assuming that iSP vaccuum range is at 100km
     # we are using an approximation between sealevel and vaccuum values
     # using that i am finding the exhaust velocity
-    iSP_srb = s.srb.isp_sealevel + (h/100000)*(s.srb.isp_vacuum-s.srb.isp_sealevel)
-    iSP_ssme = s.ssme.isp_sealevel + (h/100000) * (s.ssme.isp_vacuum-s.srb.isp_sealevel)
+    pressure = atm.getPressure(altitude)
+    pRatio = pressure / eq.seaLevelKPA
 
+    iSP_srb = s.srb.isp_vacuum + (1-pRatio)*(s.srb.isp_vacuum-s.srb.isp_sealevel)
+    iSP_ssme = s.ssme.isp_vacuum + (1-pRatio) * (s.ssme.isp_vacuum-s.srb.isp_sealevel)
 
-    return iSP
 
 def exhaustVelRelat(iSP):
     ve = iSP * eq.gravity
