@@ -49,21 +49,22 @@ while (0 <= x1[1] <= 274000):
     if timePassed <= 120:
         cDrag = 0.55
         dragSurfaceAr = columbia.ssme.shuttle_surfacearea + columbia.ssme.externaltank_surfacearea + columbia.srb.tank_surfacearea
-        
+        currentMass = columbia.ssme.fueltank_max + columbia.srb.fueltank_max 
 
     else:
         cDrag = 1.1
         dragSurfaceAr = columbia.ssme.shuttle_surfacearea + columbia.ssme.externaltank_surfacearea
+        currentMass = columbia.ssme.fueltank_max 
 
     Fthrust = rocEq.ThrustEquation(x1[1], timePassed)
     Fdrag = rocEq.dragForce(rho, v1, cDrag, dragSurfaceAr)
-    Fgrav = phase1mass * rocEq.gravity(x1[1])
+    Fgrav = currentMass * rocEq.gravity(x1[1])
 
-    a1[1] = (Fthrust - Fdrag - Fgrav) / phase1mass
+    a1[1] = (Fthrust - Fdrag - Fgrav) / currentMass
     v1[1] += a1[1] * timeStep
     x1[1] += v1[1] * timeStep
 
-    m1 -= totalFuelRate*timeStep
+    curr -= totalFuelRate*timeStep
 
 
 
