@@ -9,7 +9,7 @@ class Shuttlecraft:
     def __init__(self, name, mass, engine):
         self.name = name
         self.mass = mass
-        self.engine = engine
+        
 
 class Engine:
     def __init__(self, name, thrust_vacuum, thrust_sealevel, fuel_flowrate, burn_time, isp_vacuum, isp_sealevel, fueltank_max,empty_tank):
@@ -36,15 +36,17 @@ class Engine:
         return self.isp * equations.gravity * (1 - (self.fuel_consumed / mass))
 """
 
+
+
 ssme = Engine(
     name = "RS-25",
-    thrust_vacuum = 2279, # kN
-    thrust_sealevel = 1860, # kN
+    thrust_vacuum = 6837, # kN
+    thrust_sealevel = 5580, # kN
     fuel_flowrate = 514.49, # kg/s
     burn_time = 510, # seconds (8.5 minutes) 
     isp_vacuum= 452.3, # seconds (4.436km/s)
     isp_sealevel= 366, # seconds (3.59km/s)
-    fueltank_max= 733000, # combined
+    fueltank_max= 733000, # kg combined
     empty_tank= 26500,
     externaltank_diameters = 8.4, #m
     externaltank_height = 46.93, #m 
@@ -64,7 +66,7 @@ srb = Engine (
     isp_vacuum= 268, # seconds (4.436km/s)
     isp_sealevel= 242, # seconds (3.59km/s)  
     fueltank_max = 454000, # kg (combined)
-    empty_tank= 180000,
+    empty_tank= 180000, # kg
     tank_diameters = 3.71, # m
     tank_height = 45.46, #m
     tank_surfacearea = 1061.08 #m^2 its 2 * (2*pi*(3.71/2)*45.46)

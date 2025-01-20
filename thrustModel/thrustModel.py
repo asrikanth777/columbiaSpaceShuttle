@@ -49,7 +49,12 @@ while (0 <= x1[1] <= 274000):
     if timePassed <= 120:
         cDrag = 0.55
         dragSurfaceAr = columbia.ssme.shuttle_surfacearea + columbia.ssme.externaltank_surfacearea + columbia.srb.tank_surfacearea
-        currentMass = columbia.ssme.fueltank_max + columbia.srb.fueltank_max 
+        currentMass = columbia.ssme.fueltank_max + columbia.srb.fueltank_max
+        totalFuelRate = columbia.ssme.fuel_flowrate
+
+        if timePassed <= 510:
+            currentMass = columbia.ssme.
+            
 
     else:
         cDrag = 1.1
