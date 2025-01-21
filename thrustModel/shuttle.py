@@ -23,20 +23,12 @@ class Engine:
         self.fuel_consumed = 0
         self.fueltank_max = fueltank_max 
         self.empty_tank = empty_tank
-"""
-    def thrustCalculation(self, time):
-        if time <= self.burn_time:
-            # updates fuel consumed
-            self.fuel_consumed += self.fuel_flowrate * time
-            return self.thrust
-        else:
-            return 0
-        
-    def deltaV_calculation(self, mass):
-        return self.isp * equations.gravity * (1 - (self.fuel_consumed / mass))
-"""
 
 
+shuttle = Shuttlecraft(
+    name = "OV-102",
+    mass = 119615 # kg
+)
 
 ssme = Engine(
     name = "RS-25",

@@ -37,7 +37,7 @@ rho = 0
 a1[1] += ((Fthrust - FgravPhase1) / phase1mass)
 v1[1] += (a1*timeStep)
 x1[1] += (v1*timeStep)
-totalFuelRate = columbia.ssme.fuel_flowrate + columbia.srb.fuel_flowrate
+totalFuelRate = columbia.ssme.fuel_flowrate + columbia.srb.fuel_flowrate + columbia.shuttle.mass
 m1 += (phase1mass - (totalFuelRate)*timeStep)
 timePassed += timeStep
 
@@ -49,17 +49,16 @@ while (0 <= x1[1] <= 274000):
     if timePassed <= 120:
         cDrag = 0.55
         dragSurfaceAr = columbia.ssme.shuttle_surfacearea + columbia.ssme.externaltank_surfacearea + columbia.srb.tank_surfacearea
-        currentMass = columbia.ssme.fueltank_max + columbia.srb.fueltank_max
         totalFuelRate = columbia.ssme.fuel_flowrate
-
-        if timePassed <= 510:
-            currentMass = columbia.ssme.
-            
+        
 
     else:
         cDrag = 1.1
+        # need to work more on this part, i have it as if the SRB burns up completely before external tank is used, but both are used simulatenously.
+        # maybe i should have separate tank masses and use fuel rates individually before combining?
+        # need to spend more time on this part
         dragSurfaceAr = columbia.ssme.shuttle_surfacearea + columbia.ssme.externaltank_surfacearea
-        currentMass = columbia.ssme.fueltank_max 
+        currentMass = columbia.ssme.fueltank_max + columbia.shuttle.mass
 
     Fthrust = rocEq.ThrustEquation(x1[1], timePassed)
     Fdrag = rocEq.dragForce(rho, v1, cDrag, dragSurfaceAr)
