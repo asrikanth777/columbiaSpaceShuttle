@@ -30,11 +30,12 @@ shuttle = Shuttlecraft(
     mass = 119615 # kg
 )
 
+# keep in mind there are 3 engines in the shuttle, so these values are tripled compared to a single booster
 ssme = Engine(
     name = "RS-25",
     thrust_vacuum = 6837, # kN
     thrust_sealevel = 5580, # kN
-    fuel_flowrate = 514.49, # kg/s
+    fuel_flowrate = 514.49*3, # kg/s
     burn_time = 510, # seconds (8.5 minutes) 
     isp_vacuum= 452.3, # seconds (4.436km/s)
     isp_sealevel= 366, # seconds (3.59km/s)

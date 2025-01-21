@@ -14,29 +14,47 @@ xNew = xOld + vNew*deltaT
 """
 timeStep = 10
 timePassed = 0
-Fthrust = columbia.ssme.thrust_sealevel + columbia.srb.thrust_sealevel
 rhoInit = rocEq.atmosDensity(0)
+
+# mass of shuttle, tank, and boosters
+eTankMass = columbia.ssme.fueltank_max
+shuttleMass = columbia.shuttle.mass
+srbMass = columbia.srb.fueltank_max
+
+# thrust of shuttle engines and boosters
+ssmeThrust = columbia.ssme.thrust_sealevel
+srbThrust = columbia.srb.thrust_sealevel
+
+# mass flow rate of eTank and boosters
+eTankFlow = columbia.ssme.fuel_flowrate
+srbFlow = columbia.srb.fuel_flowrate
 
 #ignoring drag in the first time step at 10s
 
-phase1mass = columbia.ssme.fueltank_max + columbia.srb.fueltank_max 
-FgravPhase1  = phase1mass * eq.gravity
 
 a1 = np.array([ 0, 0, 0])
 v1 = np.array([ 0, 0, 0])
 x1 = np.array([ 0, 0, 0])
-m1 = 0
-Fdrag = 0
-rho = 0
 
+Fdrag = 0
 
 # going to simulate how it pitches as it ascends to that it goes into orbit
 # this is because i am approximating thrust with the sealevel and vacuum readings
 # might not even use the atmosphere calculations i planned before
 
+while (0 <= x1[1] <= 274000):
+    placeholder to stop squiggly on comments
+
+    totalMass = eTankMass + shuttleMass + srbMass
+    
+
+
+
+"""
 a1[1] += ((Fthrust - FgravPhase1) / phase1mass)
 v1[1] += (a1*timeStep)
 x1[1] += (v1*timeStep)
+
 totalFuelRate = columbia.ssme.fuel_flowrate + columbia.srb.fuel_flowrate + columbia.shuttle.mass
 m1 += (phase1mass - (totalFuelRate)*timeStep)
 timePassed += timeStep
@@ -67,8 +85,8 @@ while (0 <= x1[1] <= 274000):
     a1[1] = (Fthrust - Fdrag - Fgrav) / currentMass
     v1[1] += a1[1] * timeStep
     x1[1] += v1[1] * timeStep
-
-    curr -= totalFuelRate*timeStep
+"""
+    
 
 
 
