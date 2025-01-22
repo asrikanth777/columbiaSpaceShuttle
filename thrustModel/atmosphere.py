@@ -39,6 +39,9 @@ class Atmosphere:
     def altitudePressure(self, altitude):
         raise NotImplementedError("Each atmosphere should have its own calculation")
     
+    def altitudeTemperature(self, altitude):
+        raise NotImplementedError("Each atmosphere should have its own calculation")
+    
     
 
 
@@ -58,7 +61,10 @@ class tropoSphere(Atmosphere):
             instantPressure = self.basePressure * \
             (1 + (self.lapseRate/self.baseTemperature) * (altitude - self.baseAltitude)) ** ((-adiEq.gravity*airMolarMass) / (self.lapseRate * gasConstant))
             return instantPressure
-   
+        
+    def altitudeTemperature(self, altitude):
+        if altitude <= 11000: 
+            return self.baseTemperature + self.lapseRate * (altitude - self.baseAltitude)
 
 class stratoSphere(Atmosphere):
     def __init__(self):
@@ -76,6 +82,10 @@ class stratoSphere(Atmosphere):
         if 11000 <= altitude < 25000:
             instantPressure = self.basePressure * np.exp((-adiEq.gravity*airMolarMass*(altitude - self.baseAltitude))/(gasConstant*self.baseTemperature))
             return instantPressure
+        
+    def altitudeTemperature(self, altitude):
+        if 11000 <= altitude < 25000:
+            return self.baseTemperature
         
 class mesoSphere(Atmosphere):
     def __init__(self):
@@ -95,6 +105,12 @@ class mesoSphere(Atmosphere):
             instantPressure = self.basePressure * \
             (1 + (self.lapseRate/self.baseTemperature) * (altitude - self.baseAltitude)) ** ((-adiEq.gravity*airMolarMass) / (self.lapseRate * gasConstant))
             return instantPressure
+        
+    def altitudeTemperature(self, altitude):
+        if 25000 <= altitude < 85000:
+            return self.baseTemperature + self.lapseRate * (altitude - self.baseAltitude)
+    
+        
        
 
 
@@ -115,6 +131,9 @@ class thermoSphere(Atmosphere):
             instantPressure = self.basePressure * np.exp(-(altitude - self.baseAltitude)/self.scaleHeight)
             return instantPressure
         
+    def altitudeTemperature(self, altitude):
+        if altitude >= 85000:
+            return 3189040235 # doesn't really matter what temp is, im using these to calulate air density with pressure, but pressure at thermosphere is basically 0
     
 
 
@@ -147,10 +166,6 @@ test2 = 20000
 test3 = 60000
 test4 = 90000
 
-print(getPressure(test1))
-print(getPressure(test2))
-print(getPressure(test3))
-print(getPressure(test4))
 
 """ Recap on calculated pressures
 Given that I am struggling to find the right equations to model pressure,

@@ -4,3 +4,9 @@ December 16, 2024
     + Because of this, I want to create a 3-D model, simulating x,y,z planes. This will bring some complexity to the project that was lost when I changed plans for the calculations, and make it more fun to graph.
     + As a result, I will probably not use the atmosphere.py file alot, and I have to work on adding more equations and constants.
 - The hardest part about this is not even the coding, but the math and the planning. It feels like every corner I am having to change my approach. We will see how it works out in the end.
+
+January 21, 2025
+- Coming back from vacation and starting school, but games arent as fun so im working on this in my free time. 
+- so i had some typos with my thrustmodel.py file, need to make sure it works now
+    + i dont trust the air density approximation i wrote. i am going to use atmosphere.py to get pressure and now temperature and find density like that
+        ; finished temperature model, just need to test later to make sure

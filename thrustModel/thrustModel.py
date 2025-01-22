@@ -14,7 +14,8 @@ xNew = xOld + vNew*deltaT
 """
 timeStep = 10
 timePassed = 0
-rhoInit = rocEq.atmosDensity(0)
+rhoInit = rocEq.atmosDensity(10000)
+print(rhoInit)
 
 # mass of shuttle, tank, and boosters
 eTankMass = columbia.ssme.fueltank_max
@@ -26,8 +27,8 @@ ssmeThrust = columbia.ssme.thrust_sealevel
 srbThrust = columbia.srb.thrust_sealevel
 
 # mass flow rate of eTank and boosters
-eTankFlow = columbia.ssme.fuel_flowrate
-srbFlow = columbia.srb.fuel_flowrate
+eTankFlow = columbia.ssme.fuel_flowrate*timeStep
+srbFlow = columbia.srb.fuel_flowrate*timeStep
 
 #ignoring drag in the first time step at 10s
 
@@ -43,9 +44,9 @@ Fdrag = 0
 # might not even use the atmosphere calculations i planned before
 
 while (0 <= x1[1] <= 274000):
-    placeholder to stop squiggly on comments
-
     totalMass = eTankMass + shuttleMass + srbMass
+    x[1] = 28000000000
+
     
 
 

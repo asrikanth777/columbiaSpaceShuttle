@@ -46,7 +46,8 @@ def exhaustVelRelat(iSP):
 
 def atmosDensity(altitude):
     # sea level density = 1.225kg/m^3
-    rhoFin = 1.225*np.exp(altitude/8500)
+    rhoFin = 1.225*np.exp(altitude/85000)
+    return rhoFin
 
 
 def gravity(altitude):
