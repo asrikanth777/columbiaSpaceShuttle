@@ -10,3 +10,7 @@ January 21, 2025
 - so i had some typos with my thrustmodel.py file, need to make sure it works now
     + i dont trust the air density approximation i wrote. i am going to use atmosphere.py to get pressure and now temperature and find density like that
         ; finished temperature model, just need to test later to make sure
+
+May 29, 2025
+- Been a while since I updated this, but this project is being sunsetted in the meantime. Didn't get to work on it over the semester and now that I have the freetime, it just doesn't seem that interesting to do, and don't have a direction I want to take it. I can either really simplify it or make it crazy.
+- We are leaving this to collect dust for now but it was fun to work on

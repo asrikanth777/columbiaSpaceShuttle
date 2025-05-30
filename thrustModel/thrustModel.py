@@ -1,5 +1,6 @@
 import numpy as np
 import scipy as sp
+import atmosphere as atm
 import equations as eq
 import rocketThrustEqs as rocEq
 import shuttle as columbia
@@ -12,7 +13,7 @@ a = Fthrust - Fdrag - Fgravity / m
 vNew = vOld+ a*deltaT
 xNew = xOld + vNew*deltaT
 """
-timeStep = 10
+timeStep = 0.01
 timePassed = 0
 rhoInit = rocEq.atmosDensity(10000)
 print(rhoInit)
@@ -39,55 +40,52 @@ x1 = np.array([ 0, 0, 0])
 
 Fdrag = 0
 
-# going to simulate how it pitches as it ascends to that it goes into orbit
-# this is because i am approximating thrust with the sealevel and vacuum readings
-# might not even use the atmosphere calculations i planned before
+altitude_log = []
+velocity_log = []
+time_log = []
 
-while (0 <= x1[1] <= 274000):
-    totalMass = eTankMass + shuttleMass + srbMass
-    x[1] = 28000000000
 
+
+while x1[1] <= 274000:  # 274 km = rough orbital insertion height
+    altitude = x1[1]
+    velocity = v1[1]
+    pitchAngle = 0
     
+    if timePassed % 5.67 == 0:
+        pitchAngle += 1
 
 
+    pressure = atm.getPressure(altitude)
+    rho = rocEq.atmosDensity(altitude)
+    Fthrust = rocEq.ThrustEquation(altitude, timePassed)
 
-"""
-a1[1] += ((Fthrust - FgravPhase1) / phase1mass)
-v1[1] += (a1*timeStep)
-x1[1] += (v1*timeStep)
+    if timePassed <= 123:
+        srbMass -= columbia.srb.fuel_flowrate * timeStep
+    if timePassed <= 510:
+        eTankMass -= columbia.ssme.fuel_flowrate * timeStep
 
-totalFuelRate = columbia.ssme.fuel_flowrate + columbia.srb.fuel_flowrate + columbia.shuttle.mass
-m1 += (phase1mass - (totalFuelRate)*timeStep)
-timePassed += timeStep
+    currentMass = shuttleMass + max(eTankMass, 0) + max(srbMass, 0)
 
-# max altitude of the shuttle was at 274km
-while (0 <= x1[1] <= 274000):
-
-    rho = rocEq.atmosDensity(x1)
-
-    if timePassed <= 120:
-        cDrag = 0.55
-        dragSurfaceAr = columbia.ssme.shuttle_surfacearea + columbia.ssme.externaltank_surfacearea + columbia.srb.tank_surfacearea
-        totalFuelRate = columbia.ssme.fuel_flowrate
-        
-
+    if timePassed <= 123:
+        cD = 0.55
+        area = columbia.shuttle.surfacearea + columbia.srb.tanksurfacearea
     else:
-        cDrag = 1.1
-        # need to work more on this part, i have it as if the SRB burns up completely before external tank is used, but both are used simulatenously.
-        # maybe i should have separate tank masses and use fuel rates individually before combining?
-        # need to spend more time on this part
-        dragSurfaceAr = columbia.ssme.shuttle_surfacearea + columbia.ssme.externaltank_surfacearea
-        currentMass = columbia.ssme.fueltank_max + columbia.shuttle.mass
+        cD = 1.1
+        area = columbia.shuttle.surfacearea + columbia.ssme.tanksurfacearea
 
-    Fthrust = rocEq.ThrustEquation(x1[1], timePassed)
-    Fdrag = rocEq.dragForce(rho, v1, cDrag, dragSurfaceAr)
-    Fgrav = currentMass * rocEq.gravity(x1[1])
+    Fdrag = rocEq.dragForce(rho, v1, cD, area)
+    Fgrav = currentMass * rocEq.gravity(altitude)
 
     a1[1] = (Fthrust - Fdrag - Fgrav) / currentMass
     v1[1] += a1[1] * timeStep
     x1[1] += v1[1] * timeStep
-"""
-    
+
+    timePassed += timeStep
+
+    # Logging for plots
+    altitude_log.append(x1[1])
+    velocity_log.append(v1[1])
+    time_log.append(timePassed)
 
 
 

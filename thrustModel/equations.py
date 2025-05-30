@@ -6,7 +6,6 @@ This is the equations file, which will be used to calculate trajectory
 """
 
 import numpy as np
-import matplotlib as mpl
 from scipy import constants as spcons
 from astropy import constants as apcons
 
@@ -20,8 +19,19 @@ seaLevelKPA = seaLevelPA / 1000
 
 
 
-# Vis-Viva Equation
-# the Equation is v = sqrt(mew(2/r - 1/a))
-# def VisViva():
+def vis_viva(mu, r, a):
+    """
+    Calculate orbital speed using the vis-viva equation.
+
+    Parameters:
+        mu (float): Standard gravitational parameter (G*M)
+        r (float): Current distance from central body [m]
+        a (float): Semi-major axis of the orbit [m]
+
+    Returns:
+        float: Orbital velocity [m/s]
+    """
+    return np.sqrt(mu * (2/r - 1/a))
+
 
 

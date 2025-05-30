@@ -17,6 +17,8 @@ def ThrustEquation(altitude, time):
     else:
         finThrust = thrust_SSME
 
+    finThrust *= 1e3
+
     return finThrust
 
 def tsiolkovsky(ve, mi, mf):
@@ -37,7 +39,9 @@ def specificImpulse(altitude):
     pRatio = pressure / eq.seaLevelKPA
 
     iSP_srb = s.srb.isp_vacuum + (1-pRatio)*(s.srb.isp_vacuum-s.srb.isp_sealevel)
-    iSP_ssme = s.ssme.isp_vacuum + (1-pRatio) * (s.ssme.isp_vacuum-s.srb.isp_sealevel)
+    iSP_ssme = s.ssme.isp_vacuum + (1-pRatio) * (s.ssme.isp_vacuum-s.ssme.isp_sealevel)
+
+    return iSP_srb, iSP_ssme
 
 
 def exhaustVelRelat(iSP):
@@ -46,7 +50,7 @@ def exhaustVelRelat(iSP):
 
 def atmosDensity(altitude):
     # sea level density = 1.225kg/m^3
-    rhoFin = 1.225*np.exp(altitude/85000)
+    rhoFin = 1.225*np.exp(-altitude/85000)
     return rhoFin
 
 
